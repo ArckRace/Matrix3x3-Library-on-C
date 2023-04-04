@@ -2,12 +2,10 @@
 #include <math.h>
 
 #define MXSIZE 3
-#define SUCCESS 0
-#define NULLPTR -1
 
-int mx3MulScalar(matrix mx, double val){
+int mx3MulScalar(matrix mx, FTYPE val){
   if (!mx){
-      return NULLPTR;
+      return NULL_PTR;
     }
   for (int i = 0; i < MXSIZE; i++){
       for (int j = 0; j < MXSIZE; j++){
@@ -19,7 +17,7 @@ int mx3MulScalar(matrix mx, double val){
 
 int mx3Sum(matrix mxL, matrix mxR){
   if (!mxL | !mxR){
-      return NULLPTR;
+      return NULL_PTR;
     }
   for (int i = 0; i < MXSIZE; i++){
       for (int j = 0; j < MXSIZE; j++){
@@ -31,7 +29,7 @@ int mx3Sum(matrix mxL, matrix mxR){
 
 int mx3Sub(matrix mxL, matrix mxR){
   if (!mxL | !mxR){
-      return NULLPTR;
+      return NULL_PTR;
     }
   for (int i = 0; i < MXSIZE; i++){
       for (int j = 0; j < MXSIZE; j++){
@@ -43,7 +41,7 @@ int mx3Sub(matrix mxL, matrix mxR){
 
 int mx3Mul(matrix mxL, matrix mxR){
   if (!mxL | !mxR){
-      return NULLPTR;
+      return NULL_PTR;
     }
   matrix mxMul;
   for (int i = 0; i < MXSIZE; i++){
@@ -58,11 +56,11 @@ int mx3Mul(matrix mxL, matrix mxR){
   return SUCCESS;
 }
 
-int mx3GetDet(matrix mx, double *det){
+int mx3GetDet(matrix mx, FTYPE *det){
   if (!mx){
-      return NULLPTR;
+      return NULL_PTR;
     }
-  double a[3],b[3],as,bs;
+  FTYPE a[3],b[3],as,bs;
   as = 0;
   bs = 0;
   a[0] = mx[0][0] * mx[1][1] * mx[2][2];
@@ -82,7 +80,7 @@ int mx3GetDet(matrix mx, double *det){
 
 int mx3Tran(matrix mx){
   if (!mx){
-      return NULLPTR;
+      return NULL_PTR;
     }
   matrix mxTrans;
   for (int i = 0; i < MXSIZE; i++){
@@ -100,9 +98,9 @@ int mx3Tran(matrix mx){
 
 int mx3GetMinor(matrix mx, matrix mxOut){
   if (!mx | !mxOut){
-      return NULLPTR;
+      return NULL_PTR;
     }
-  double n[2][2];
+  FTYPE n[2][2];
   int k = 0;
   int l = 0;
   for (int a = 0; a < MXSIZE; a++){
@@ -131,10 +129,10 @@ int mx3GetMinor(matrix mx, matrix mxOut){
 
 int mx3Inv(matrix mx){
   if (!mx){
-      return NULLPTR;
+      return NULL_PTR;
     }
   matrix CoFactor;
-  double det = 0;
+  FTYPE det = 0;
   mx3GetDet(mx, &det);
   mx3GetMinor(mx,CoFactor);
   mx3Tran(CoFactor);
@@ -145,11 +143,22 @@ int mx3Inv(matrix mx){
     }
   return SUCCESS;
 }
-// WIP -------
-int mx3HatMatrix(double vector[3], matrix mx){
+
+int mx3HatMatrix(FTYPE vector[3], matrix mx){
+  if (!mx | !vector){
+      return NULL_PTR;
+    }
+  mx[0][0] = 0;
+  mx[0][1] = -vector[2];
+  mx[0][2] = vector[1];
+  mx[1][0] = vector[2];
+  mx[1][1] = 0;
+  mx[1][2] = -vector[0];
+  mx[2][0] = -vector[1];
+  mx[2][1] = vector[0];
+  mx[2][2] = 0;
   return SUCCESS;
 }
-// -----------
 
 void pprint(matrix mx){
   for (int i = 0; i < MXSIZE; ++i){
