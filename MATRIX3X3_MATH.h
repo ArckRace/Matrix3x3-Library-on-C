@@ -23,29 +23,38 @@
 #define FTYPE double
 #endif
 
-typedef enum enumReturnCode{
+enum ReturnCode{
   SUCCESS,
   NULL_PTR,
   DIV_ZERO
-} ReturnCode;
+};
 
-typedef double matrix[3][3];
+typedef double t_mx3x3[3][3];
 
+int mx3x3_add_to(MX3_IN_OUT t_mx3x3* pmx, MX3_IN t_mx3x3* pmadd);   // *pmx = *pmx + *pmadd;
+int mx3x3_sub_to(MX3_IN_OUT t_mx3x3* pmx, MX3_IN t_mx3x3* pmsub);   // *pmx = *pmx - *pmsub;
+int mx3x3_mul_to(MX3_IN_OUT t_mx3x3* pmx, MX3_IN t_mx3x3* pmmul);   // *pmx = (*pmx) * (*pmmul);
+int mx3x3_transp_to(MX3_IN_OUT t_mx3x3* pmx);                       // *pmx = (*pmx)^T;
+int mx3x3_inv_to(MX3_IN_OUT t_mx3x3* pmx);                          // *pmx = (*pmx)^(-1);
+int mx3x3_div_to(MX3_IN_OUT t_mx3x3* pmx, MX3_IN t_mx3x3* pmdiv);   // *pmx = (*pmx)*[(*pmdiv)^(-1)];
+int mx3x3_mul_to_c(MX3_IN_OUT t_mx3x3* pmx, FTYPE fc);             // *pmx = (*pmx)*fc;
 
-// Basic math operations
-int mx3MulScalar(MX3_IN matrix mx, FTYPE val);         // Умножение матрицы на скаляр
-int mx3Sum(MX3_IN matrix l_mx, MX3_IN matrix r_mx);     // Сложение двух матриц
-int mx3Sub(MX3_IN matrix l_mx, MX3_IN matrix r_mx);     // Разность двух матриц
-int mx3Mul(MX3_IN matrix l_mx, MX3_IN matrix r_mx);     // Перемножение матриц
-int mx3GetDet(MX3_IN matrix mx, FTYPE *det);           // Нахождения определителя матрицы
-int mx3GetMinor(MX3_IN matrix mx, MX3_OUT matrix mxOut);
+int mx3x3_sum(MX3_OUT t_mx3x3* pmx_res, MX3_IN t_mx3x3* pmxl, MX3_IN t_mx3x3* pmxr);    // *pmx_res = *pmxl + *pmxr
+int mx3x3_sub(MX3_OUT t_mx3x3* pmx_res, MX3_IN t_mx3x3* pmxl, MX3_IN t_mx3x3* pmxr);    // *pmx_res = *pmxl - *pmxr
+int mx3x3_mul(MX3_OUT t_mx3x3* pmx_res, MX3_IN t_mx3x3* pmxl, MX3_IN t_mx3x3* pmxr);    // *pmx_res = (*pmxl) * (*pmxr)
+int mx3x3_transp(MX3_OUT t_mx3x3* pmx_res, MX3_IN t_mx3x3* pmx);                        // *pmx_res = [(*pmx)^(T)]
+int mx3x3_inv(MX3_OUT t_mx3x3* pmx_res, MX3_IN t_mx3x3* pmx);                           // *pmx_res = [(*pmx)^(-1)]
+int mx3x3_div(MX3_OUT t_mx3x3* pmx_res, MX3_IN t_mx3x3* pmxl, MX3_IN t_mx3x3* pmxr);    // *pmx_res = (*pmxl) * [(*pmxr)^(-1)]
+int mx3x3_mul_c(MX3_OUT t_mx3x3* pmx_res, MX3_IN t_mx3x3* pmxl, FTYPE fc);          // *pmx_res = *pmxl * fc
 
-// Extra math operations
-int mx3Tran(MX3_IN matrix mx);                          // Транспонирование матрицы
-int mx3Inv(MX3_IN matrix mx);                           // Возведение матрицы в (-1) степень
-int mx3HatMatrix(FTYPE vector[3], MX3_OUT matrix mx);  // Составление кососимметрической матрицы из вектора
+int mx3x3_set_skew_0(MX3_OUT t_mx3x3* pmx, FTYPE pfvec[3]);        // skew symetric MX
+int mx3x3_set_skew_1(MX3_OUT t_mx3x3* pmx, FTYPE pfvec[3]);        // skew + I
 
-// Print matrix
-void pprint(MX3_IN matrix mx);
+double mx3x3_get_det(MX3_IN t_mx3x3* pmx);
+int mx3x3_get_cofactor(MX3_OUT t_mx3x3* pmx_res, MX3_IN t_mx3x3* pmx);
+
+//------------------------------------------------------------------------------
+// Print mx
+void pprint(MX3_IN t_mx3x3 mx);
 
 #endif // MATRIX3X3_MATH_H
